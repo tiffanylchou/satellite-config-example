@@ -1,0 +1,47 @@
+name: Publish Kubernetes Sample
+on:
+  push:
+    tags:
+    - 'v[0-9]+\.[0-9]+\.[0-9]+'
+
+jobs:
+  validate_workflow_job:
+    name: Validate
+    uses: ./.github/workflows/validate.yml
+  assemble-yaml:
+    runs-on: ubuntu-latest
+    needs: validate_workflow_job
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: List kubernetes files in the repository
+        run: |
+          find deplyoments/*  -type f -print | sort | xargs -I{} sh -c "cat {}; echo '---'" >final.yaml.j2
+      - name: Process jinja2 template
+        uses: cuchi/jinja2-action@v1.2.0
+        with:
+          template: final.yaml.j2
+          output_file: final.yaml
+      - name: debug
+        run: |
+          cat final.yaml
+      - uses: actions/upload-artifact@v3
+        with:
+          name: configuration-file
+          path: final.yaml
+  publish:
+    runs-on: ubuntu-latest
+    needs: assemble-yaml
+    permissions:
+      contents: write
+    steps:
+    - name: Download math result for job 1
+      uses: actions/download-artifact@v3
+      with:
+        name: configuration-file
+    - name: debug
+      run: cat final.yaml
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "final.yaml"
+        token: ${{ secrets.GITHUB_TOKEN }}
