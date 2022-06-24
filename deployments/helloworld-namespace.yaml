@@ -1,7 +1,7 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: demo-namespace
+  name: demo-namespace-1
   labels:
-    name: demo-namespace
+    name: demo-namespace-1
     razee/watch-resource: lite
