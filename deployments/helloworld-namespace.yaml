@@ -4,3 +4,4 @@ metadata:
   name: demo-namespace
   labels:
     name: demo-namespace
+    razee/watch-resource: lite
