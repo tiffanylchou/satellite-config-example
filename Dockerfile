@@ -1,14 +1,27 @@
-# # Create build stage based on buster image
-# FROM golang:1.16-buster AS builder
-# # Create working directory under /app
-# WORKDIR /app
-# # Copy over all go config (go.mod, go.sum etc.)
-# COPY helloworld.go /
-# # Install any required modules
-# RUN go build -o /helloworld /helloworld.go
+# Copyright 2022 IBM Corp. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
+FROM golang:1.19-alpine AS build-image
+COPY /go/src /go/src
+RUN go build -o /go/bin/helloworld /go/src/helloworld.go
 
-FROM golang:1.16-alpine
-COPY helloworld.go /
-RUN go build -o /helloworld /helloworld.go
-CMD /helloworld
+FROM alpine
+RUN addgroup -S samplegroup
+RUN adduser -S sampleuser -G samplegroup
+WORKDIR /home/sampleuser
+USER sampleuser
+COPY --from=build-image --chown=sampleuser /go/bin /home/sampleuser/bin
+COPY LICENSE /home/sampleuser/bin
+EXPOSE 8080
+CMD ["/home/sampleuser/bin/helloworld"]
