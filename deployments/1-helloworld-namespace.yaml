@@ -11,17 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-FROM golang:1.19-alpine AS build-image
-COPY /go/src /go/src
-RUN go build -o /go/bin/helloworld /go/src/helloworld.go
-
-FROM alpine
-RUN addgroup -S samplegroup
-RUN adduser -S sampleuser -G samplegroup
-WORKDIR /home/sampleuser
-USER sampleuser
-COPY --from=build-image --chown=sampleuser /go/bin /home/sampleuser/bin
-COPY LICENSE /home/sampleuser/bin
-EXPOSE 8080
-CMD ["/home/sampleuser/bin/helloworld"]
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: satellite-config-sample
+  labels:
+    name: satellite-config-sample
