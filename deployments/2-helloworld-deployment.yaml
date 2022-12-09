@@ -14,6 +14,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    version: "1.0"
   labels:
     app: helloworld-app
     razee/watch-resource: lite
@@ -29,11 +31,10 @@ spec:
       labels:
         app: helloworld-app
     spec:
-      securityContext:
-        runAsUser: 100
-        runAsGroup: 101
-        fsGroup: 101
       containers:
         - image: icr.io/satellite-config/helloworld
           name: helloworld-app
           imagePullPolicy: Always
+          env:
+           - name: VERSION
+             value: metadata.annotations.version
