@@ -19,11 +19,18 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
+	var version = "0.0"
+	var setVersion = os.Getenv("VERSION")
+	if setVersion != "" {
+		version = setVersion
+	}
+	log.Println("Starting up " + version)
 	http.HandleFunc("/helloworld", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, World!")
+		fmt.Fprintf(w, "Hello, World " + version + "!")
 	})
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)

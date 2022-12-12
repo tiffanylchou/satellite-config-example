@@ -12,16 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.19-alpine AS build-image
+# Build application
+FROM golang:alpine AS build-image
+RUN adduser -S sample -G root
+USER sample
 COPY /go/src /go/src
-RUN go build -o /go/bin/helloworld /go/src/helloworld.go
+RUN CGO_ENABLED=0 go build -o /go/bin/helloworld /go/src/helloworld.go
+RUN chmod 555 /go/bin/helloworld
+COPY --chown=sample --chmod=444 LICENSE /go/bin/
+RUN ls -l /go/bin/
 
-FROM alpine
-RUN addgroup -S samplegroup
-RUN adduser -S sampleuser -G samplegroup
-WORKDIR /home/sampleuser
-USER sampleuser
-COPY --from=build-image --chown=sampleuser /go/bin /home/sampleuser/bin
-COPY LICENSE /home/sampleuser/bin
+# Create minimal runtime image
+FROM scratch
+COPY --from=build-image /go/bin/ /
 EXPOSE 8080
-CMD ["/home/sampleuser/bin/helloworld"]
+CMD ["/helloworld"]
