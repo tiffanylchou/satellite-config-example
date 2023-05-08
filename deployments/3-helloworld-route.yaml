@@ -22,6 +22,8 @@ spec:
   path: "/helloworld"
   port:
     targetPort: 8080
+  tls:
+    termination: edge
   to:
     kind: Service
     name: helloworld-svc
