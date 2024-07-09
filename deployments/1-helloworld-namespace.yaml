@@ -14,6 +14,6 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: satellite-config-sample
+  name: 6930004n4y-se-l3
   labels:
-    name: satellite-config-sample
+    name: "EnsureExists"
