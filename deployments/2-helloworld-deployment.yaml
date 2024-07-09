@@ -15,12 +15,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    version: "1.0"
+    version: "1.1"
   labels:
     app: helloworld-app
     razee/watch-resource: lite
   name: helloworld-app
-  namespace: satellite-config-sample
+  namespace: 6930004n4y-se-l3
 spec:
   replicas: 1
   selector:
@@ -37,4 +37,4 @@ spec:
           imagePullPolicy: Always
           env:
            - name: VERSION
-             value: "1.0"
+             value: "1.1"

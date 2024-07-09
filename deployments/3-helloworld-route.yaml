@@ -15,7 +15,7 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: helloworld-route
-  namespace: satellite-config-sample
+  namespace: 6930004n4y-se-l3
   labels:
     razee/watch-resource: lite
 spec:
