@@ -15,7 +15,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    version: "1.1"
+    version: "1.2"
   labels:
     app: helloworld-app
     razee/watch-resource: lite
@@ -37,4 +37,4 @@ spec:
           imagePullPolicy: Always
           env:
            - name: VERSION
-             value: "1.1"
+             value: "1.2"
